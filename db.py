@@ -10,7 +10,6 @@ class Mongo():
         user = user and user or DATABASES.get('user')
         password = password and qutoe_plus(password) or quote_plus(DATABASES.get('password'))
 
-        print(f"mongodb+srv://{user}:{password}@{host}?retryWrites=true&w=majority")
         self.client = MongoClient(f"mongodb+srv://{user}:{password}@{host}?retryWrites=true&w=majority", int(port))
         self.db = self.client.get_database(collection)
 
