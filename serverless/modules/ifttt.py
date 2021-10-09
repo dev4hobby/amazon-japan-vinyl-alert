@@ -1,5 +1,5 @@
 import requests
-from settings import IFTTT
+from .settings import IFTTT
 def send_vinyl_to_webhook(vinyl: dict):
     '''
     Send vinyl info to IFTTT webhook

@@ -6,3 +6,8 @@ __pycache__/
 
 # Environments
 .env
+
+# Serverless
+config.*.json
+config.json
+.serverless

@@ -1,6 +1,7 @@
 import requests
-from settings import CRAWLER
+from datetime import datetime
 from bs4 import BeautifulSoup
+from .settings import CRAWLER
 
 def get_vinyl_document_list() -> list:
     data = requests.get(CRAWLER.get('amazon_jp_vinyl_url'), headers=CRAWLER.get('headers'))
@@ -16,7 +17,8 @@ def get_vinyl_document_list() -> list:
                 'url': f"{CRAWLER.get('amazon_jp_url')}{vinyl.select_one('a').get('href')}",
                 'artist': vinyl.select_one('a.a-size-base.a-link-normal').text 
                     if vinyl.select_one('a.a-size-base.a-link-normal').text != 'Vinyl'
-                    else vinyl.select_one('div.a-row.a-size-base.a-color-secondary').text.replace('by ', '')
+                    else vinyl.select_one('div.a-row.a-size-base.a-color-secondary').text.replace('by ', ''),
+                'created_at': datetime.now()
             }
             documents.append(vinyl_info)
         except Exception as e:
