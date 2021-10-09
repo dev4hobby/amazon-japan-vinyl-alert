@@ -33,7 +33,7 @@ python run.py
   "VINYL_MONGO_PASSWORD":"...",
   "VINYL_MONGO_COLLECTION":"amazon_japan_lp",
   "VINYL_IFTTT_WEBHOOK_KEY":"...",
-  "VINYL_LAMBDA_LAYER":"..."
+  "VINYL_LAMBDA_LAYER":"ARN OF YOUR LAMBDA LAYER"
 }
 ```
 
@@ -56,8 +56,9 @@ python run.py
 1. Clone the repository
 2. Install the dependencies
 3. Check your AWS Key
-4. create a `config.dev.json` file in the `serverless` directory
-5. Deploy
+4. Add layer on your AWS console and check your `arn` or layer
+5. create a `config.dev.json` file in the `serverless` directory
+6. Deploy
 
 ```bash
 npm -i -g serverless
@@ -66,6 +67,10 @@ echo "export AWS_SECRET_ACCESS_KEY=..." >> ~/.bashrc # or ~/.zshrc
 source ~/.bashrc # or ~/.zshrc
 git clone https://github.com/dev4hobby/amazon-japan-vinyl-alert.git
 cd amazon-japan-vinyl-alert
+mkdir python
+pip install -r ./requirements.txt -t ./python
+zip -r ./python.zip ./python
+# Add layer and upload your python.zip
 vi serverless/config.dev.json
 # ... write down your config.dev.json
 sls deploy
