@@ -1,0 +1,47 @@
+service: vinyl-cache
+# app: vinyl-cache
+# org: vinyl-cache
+
+frameworkVersion: '2'
+
+package:
+  individually: true
+  patterns:
+    - "!config.*.json"
+    - "!config.json"
+
+provider:
+  name: aws
+  runtime: python3.8
+  lambdaHashingVersion: 20201221
+
+  stage: dev
+  region: ap-northeast-2
+  
+  environment:
+    VINYL_MONGO_HOST: ${file(./config.${opt:stage, 'dev'}.json):VINYL_MONGO_HOST}
+    VINYL_MONGO_PORT: ${file(./config.${opt:stage, 'dev'}.json):VINYL_MONGO_PORT}
+    VINYL_MONGO_USER: ${file(./config.${opt:stage, 'dev'}.json):VINYL_MONGO_USER}
+    VINYL_MONGO_PASSWORD: ${file(./config.${opt:stage, 'dev'}.json):VINYL_MONGO_PASSWORD}
+    VINYL_MONGO_COLLECTION: ${file(./config.${opt:stage, 'dev'}.json):VINYL_MONGO_COLLECTION}
+    VINYL_IFTTT_WEBHOOK_KEY: ${file(./config.${opt:stage, 'dev'}.json):VINYL_IFTTT_WEBHOOK_KEY}
+    VINYL_LAMBDA_LAYER: ${file(./config.${opt:stage, 'dev'}.json):VINYL_LAMBDA_LAYER}
+
+functions:
+  crawl_vinyl_from_amazon_japan:
+    handler: handler.crawl_vinyl_from_amazon_japan
+    events:
+      - schedule: cron(30 6 ? * * *)
+    layers:
+      - ${file(./config.${opt:stage, 'dev'}.json):VINYL_LAMBDA_LAYER}
+
+    
+
+  get_vinyl_list:
+    handler: handler.get_vinyl_list
+    events:
+      - httpApi:
+          path: /vinyl
+          method: get
+    layers:
+      - ${file(./config.${opt:stage, 'dev'}.json):VINYL_LAMBDA_LAYER}
