@@ -7,7 +7,41 @@ __pycache__/
 # Environments
 .env
 
-# Serverless
+### Serverless ###
 config.*.json
 config.json
 .serverless
+
+### Next ###
+# dependencies
+vinyl-web/node_modules
+vinyl-web/.pnp
+vinyl-web/.pnp.js
+
+# testing
+vinyl-web/coverage
+
+# next.js
+vinyl-web/.next/
+vinyl-web/out/
+
+# production
+vinyl-web/build
+
+# misc
+.DS_Store
+*.pem
+
+# debug
+vinyl-web/npm-debug.log*
+vinyl-web/yarn-debug.log*
+vinyl-web/yarn-error.log*
+
+# local env files
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# vercel
+vinyl-web/.vercel
