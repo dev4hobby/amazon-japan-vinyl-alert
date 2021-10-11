@@ -8,12 +8,32 @@ import { vinylUrl } from '../env'
 import { CardView } from '../components/card'
 // import './api/vinyl'
 
+interface VinylInfo {
+  artist: string
+  cover: URL
+  created_at: {
+    date: number
+  }
+  price: string
+  title: string
+  url: URL
+}
+
+interface VinylResponse {
+  last: {
+    date: number
+  }, 
+  vinyls: Array<VinylInfo>
+}
+
 const Home: NextPage = () => {
   useEffect(() => {
     getVinylInfo()
     // renderVinyl()
   }, []) // TODO: page end or not flag 로 값 바뀔때마다 불러오는건어떨까.
-  const [vinylInfoForPage, setVinylInfoForPage] = useState<JSON | undefined>(undefined)
+  const [vinylInfoForPage, setVinylInfoForPage] = useState<VinylResponse>({
+    last: {date: 0}, vinyls: []
+  })
 
   const getVinylInfo = async () => {
     if (!vinylUrl) {
@@ -23,7 +43,7 @@ const Home: NextPage = () => {
     const vinyls = await fetch(vinylUrl, {
       method: 'GET',
     })
-    const vinylInfo = await vinyls.json()
+    const vinylInfo = await vinyls.json() as VinylResponse
     setVinylInfoForPage(vinylInfo)
   } 
 
@@ -39,7 +59,18 @@ const Home: NextPage = () => {
         <div className='md:container md:mx-auto' style={{
           backgroundColor: '#c4c4c4'
         }}>
-          {/* <CardView /> */}
+          {vinylInfoForPage.vinyls.map((vinyl, index) => {
+            return (
+              <CardView
+                key={index}
+                artist={vinyl.artist}
+                cover={vinyl.cover}
+                price={vinyl.price}
+                title={vinyl.title}
+                url={vinyl.url}
+              />
+            )
+          })}
         </div>
       </main>
 
